@@ -1,70 +1,61 @@
 from src.tile import *
+import pprint
 
 
 class Board(object):
     """docstring"""
-    def __init__(self):
-        self.board = [[Tile((x, y)) for x in range(8)] for y in range(8)]
-        self[3, 3] = Tile((3, 3), WHITE)
-        self[3, 4] = Tile((3, 4), BLACK)
-        self[4, 3] = Tile((4, 3), BLACK)
-        self[4, 4] = Tile((4, 4), WHITE)
+    def __init__(self, board_size):
+        self.board_size = board_size
+        self.board = [[Tile((x, y), EMPTY) for x in range(self.board_size)] for y in range(self.board_size)]
+        self[self.board_size // 2 - 1, self.board_size // 2 - 1] = WHITE
+        self[self.board_size // 2 - 1, self.board_size // 2] = BLACK
+        self[self.board_size // 2, self.board_size // 2 - 1] = BLACK
+        self[self.board_size // 2, self.board_size // 2] = WHITE
 
     def is_correct_move(self, player, coordinates):
-        if self[coordinates].color != None and not self.is_on_board(coordinates):
+        if self[coordinates].color is not None and not self.in_range(coordinates):
             return False
 
-        self[coordinates] = Tile(coordinates, player)
-        opponent = get_opponent(player)
-
-        tiles_to_flip = []
+        to_flip = []
+        other = get_opponent(player)
         for dx, dy in DIRECTIONS:
             x, y = coordinates
             x += dx
             y += dy
-            if self.is_on_board((x, y)) and self[x, y].color == opponent:
+
+            if self.in_range((x, y)) and self[x, y].color == other:
                 x += dx
                 y += dy
-                if not self.is_on_board((x, y)):
-                    continue
-                while self[x, y].color == opponent:
+
+                while self.in_range((x, y)) and self[x, y].color == other:
                     x += dx
                     y += dy
-                    if not self.is_on_board((x, y)):
-                        break
-                if not self.is_on_board((x, y)):
-                    continue
                 if self[x, y].color == player:
-                    while 1:
+                    while (x, y) != coordinates:
                         x -= dx
                         y -= dy
-                        if x == coordinates[0] and y == coordinates[1]:
+                        if (x, y) == coordinates:
                             break
-                        tiles_to_flip.append(self[x, y])
-
-            self[coordinates] = Tile(coordinates)
-            if len(tiles_to_flip) == 0:
-                return False
-            return
+                        to_flip.append(self[x, y])
+        return to_flip if to_flip else False
 
     def get_correct_moves(self, player):
-        valid_moves = []
+        correct_moves = []
 
-        for x in range(8):
-            for y in range(8):
-                if self.is_correct_move(player, (x, y)) != False:
-                    valid_moves.append(self[x, y])
-        return valid_moves
+        for x in range(self.board_size):
+            for y in range(self.board_size):
+                if self.is_correct_move(player, (x, y)):
+                    correct_moves.append(self[x, y])
+        return correct_moves
 
-    @staticmethod
-    def is_on_board(coordinates):
-        return 0 <= coordinates[0] <= 7 and 0 <= coordinates[1] <= 7
+    def in_range(self, coordinates):
+        return 0 <= coordinates[0] < self.board_size and 0 <= coordinates[1] < self.board_size
 
     def __getitem__(self, coordinates):
-        return self.board[coordinates[1]][coordinates[0]]
+        return self.board[coordinates[0]][coordinates[1]]
 
-    def __setitem__(self, coordinates, value):
-        self.board[coordinates[1]][coordinates[0]] = value
+    def __setitem__(self, coordinates, color):
+        self.board[coordinates[0]][coordinates[1]] = Tile(tuple(reversed(coordinates)), color)
 
     def __repr__(self):
         repr_ = []
@@ -77,6 +68,7 @@ class Board(object):
     def __iter__(self):
         return self.board.__iter__()
 
+
 if __name__ == '__main__':
-    board = Board()
-    print(board)
+    b = Board(8)
+    print(list(map(lambda x: x.coordinates, b.get_correct_moves(WHITE))))

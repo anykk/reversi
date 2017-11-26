@@ -7,7 +7,7 @@ class BoardTests(unittest.TestCase):
     """docstring for ModelTests"""
 
     def setUp(self):
-        self.board = Board()
+        self.board = Board(8)
 
     def test_init(self):
         self.assertEqual(str(self.board).replace('\n', ''), '........'
