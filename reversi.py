@@ -1,7 +1,9 @@
 import sys
+from os import sep
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
+from src.driver import *
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -10,15 +12,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle("Othello")
-        self.resize(640, 480)
+        self.setWindowTitle("Reversi")
+        self.setFixedSize(640, 480)
         self.center()
-        self.setMinimumSize(QtCore.QSize(640, 480))
-        self.setMaximumSize(QtCore.QSize(640, 480))
 
-        window = QtWidgets.QWidget()
+        window = QtWidgets.QWidget(parent=self)
+        game = Frame(parent=window)
         self.setCentralWidget(window)
-        game = QtWidgets.QFrame(window)
 
         white_lcd = QtWidgets.QLCDNumber(window)
         black_lcd = QtWidgets.QLCDNumber(window)
@@ -26,72 +26,35 @@ class MainWindow(QtWidgets.QMainWindow):
         white_label.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignBottom)
         black_label = QtWidgets.QLabel("Black:", window)
         black_label.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignBottom)
-        game.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Raised)
-        """
+
         layout = QtWidgets.QGridLayout()
         layout.addWidget(game, 0, 0, 48, 48)
-        layout.addWidget(white_label, 5, 50, 2, 13)
-        layout.addWidget(white_lcd, 8, 50, 7, 13)
-        layout.addWidget(black_label, 20, 50, 2, 13)
-        layout.addWidget(black_lcd, 23, 50, 7, 13)
+        layout.addWidget(white_label, 1, 50, 3, 9)
+        layout.addWidget(white_lcd, 4, 50, 5, 9)
+        layout.addWidget(black_label, 13, 50, 3, 9)
+        layout.addWidget(black_lcd, 16, 50, 5, 9)
 
         window.setLayout(layout)
-        """
+
         game.setFocusPolicy(QtCore.Qt.StrongFocus)
 
-        game.resize(460, 460)
-        game.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Raised)
-        game.setMidLineWidth(3)
-        white_label.move(470, 30)
-        white_label.resize(150, 18)
-        white_lcd.move(470, 50)
-        white_lcd.resize(150, 70)
-        black_label.move(470, 180)
-        black_label.resize(150, 18)
-        black_lcd.move(470, 200)
-        black_lcd.resize(150, 70)
+        buttonNew_game = QtWidgets.QPushButton("New game")
+        buttonRestart = QtWidgets.QPushButton("Restart")
+        buttonSave_game = QtWidgets.QPushButton("Save")
+        buttonLoad_game = QtWidgets.QPushButton("Load")
+        buttonExit = QtWidgets.QPushButton("Exit")
 
-        menubar = self.menuBar()
-        menubar.setGeometry(QtCore.QRect(0, 0, 640, 3))
-        gameMenu = menubar.addMenu("Game")
-        toolsMenu = menubar.addMenu("Tools")
-        helpMenu = menubar.addMenu("Help")
+        layout.addWidget(buttonNew_game, 25, 50, 3, 9)
+        layout.addWidget(buttonRestart, 28, 50, 3, 9)
+        layout.addWidget(buttonSave_game, 31, 50, 3, 9)
+        layout.addWidget(buttonLoad_game, 34, 50, 3, 9)
+        layout.addWidget(buttonExit, 37, 50, 3, 9)
 
-        actionNew_game = QtWidgets.QAction("New game", self)
-        actionNew_game.setShortcut("Ctrl+N")
-        actionRestart = QtWidgets.QAction("Restart", self)
-        actionRestart.setShortcut("Ctrl+R")
-        actionSave = QtWidgets.QAction("Save", self)
-        actionSave.setShortcut("Ctrl+S")
-        actionLoad = QtWidgets.QAction("Load", self)
-        actionLoad.setShortcut("Ctrl+L")
-        actionExit = QtWidgets.QAction("Exit", self)
-        actionExit.setShortcut("Ctrl+E")
-        actionRecords = QtWidgets.QAction("Records", self)
-        actionRecords.setShortcut("Ctrl+Alt+R")
-        actionAbout = QtWidgets.QAction("About", self)
-        actionAbout.setShortcut("F1")
-
-        gameMenu.addAction(actionNew_game)
-        gameMenu.addAction(actionRestart)
-        gameMenu.addAction(actionSave)
-        gameMenu.addAction(actionLoad)
-        gameMenu.addSeparator()
-        gameMenu.addAction(actionExit)
-
-        toolsMenu.addAction(actionRecords)
-        helpMenu.addAction(actionAbout)
-        menubar.addAction(gameMenu.menuAction())
-        menubar.addAction(toolsMenu.menuAction())
-        menubar.addAction(helpMenu.menuAction())
-
-        actionNew_game.triggered.connect(self._new_game)
-        actionRestart.triggered.connect(self._restart)
-        actionSave.triggered.connect(self._save)
-        actionLoad.triggered.connect(self._load)
-        actionExit.triggered.connect(self.close)
-        actionRecords.triggered.connect(self._records)
-        actionAbout.triggered.connect(self._about)
+        buttonNew_game.clicked.connect(self._new_game)
+        buttonRestart.clicked.connect(self._restart)
+        buttonSave_game.clicked.connect(self._save)
+        buttonLoad_game.clicked.connect(self._load)
+        buttonExit.clicked.connect(self.close)
 
         self.show()
 
@@ -110,20 +73,71 @@ class MainWindow(QtWidgets.QMainWindow):
         print("Game was restarted")
 
     def _save(self):
-        filename, d = QtWidgets.QFileDialog(self).getSaveFileName()
-        d.setWindowModality(QtCore.Qt.ApplicationModal)
-        d.show()
+        filename, _ = QtWidgets.QFileDialog(self).getSaveFileName(self, "Save game",
+                                                                  f".{sep}loads",
+                                                                  "Text files (*.txt)")
+        print(filename)
 
     def _load(self):
-        filename, d = QtWidgets.QFileDialog(self).getOpenFileName()
-        d.setWindowModality(QtCore.Qt.ApplicationModal)
-        d.show()
+        filename, _ = QtWidgets.QFileDialog(self).getOpenFileName(self, "Load game",
+                                                                  f".{sep}loads",
+                                                                  "Text files (*.txt)")
+        print(filename)
 
     def _records(self):
         print("1")
 
     def _about(self):
         print("help")
+
+
+class Frame(QtWidgets.QFrame):
+    """docstring"""
+    def __init__(self, size=8, player=BLACK, parent=None):
+        super().__init__(parent)
+        self._game = Reversi(size, player)
+
+    def paintEvent(self, event):
+        qp = QtGui.QPainter(self)
+        grid = QtGui.QPainterPath()
+        grid.addRect(0, 0, self.height(), self.width())
+        qp.fillPath(grid, QtGui.QColor(51, 204, 51))
+
+        for i in range(len(self._game._field)):
+            x = self.width() / len(self._game._field) * i
+            qp.drawLine(x, 0, x, self.height())
+
+            y = self.height() / len(self._game._field) * i
+            qp.drawLine(0, y, self.width(), y)
+
+        for height in range(len(self._game._field)):
+            for width in range(len(self._game._field)):
+                pieces_path = QtGui.QPainterPath()
+                w = self.width() / len(self._game._field)
+                h = self.height() / len(self._game._field)
+
+                x = w * width
+                y = h * height
+
+                bounding_rect = QtCore.QRectF(x, y, w, h)
+
+                piece = self._game._field[height, width]
+                if piece == WHITE:
+                    pieces_path.addEllipse(bounding_rect)
+                    qp.fillPath(pieces_path, QtGui.QColor(255, 255, 255))
+                elif piece == BLACK:
+                    pieces_path.addEllipse(bounding_rect)
+                    qp.fillPath(pieces_path, QtGui.QColor(0, 0, 0))
+
+    def pixels_to_field(self, x, y):
+        field_width = self.width() // len(self._game._field)
+        field_height = self.height() // len(self._game._field)
+        return x // field_width, y // field_height
+
+    def mousePressEvent(self, event):
+        self._game.make_move(self.pixels_to_field(event.y(), event.x()))
+        self.repaint()
+        self.update()
 
 
 if __name__ == "__main__":

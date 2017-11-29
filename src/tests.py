@@ -1,16 +1,16 @@
 import unittest
 
-from src.board import *
+from game import *
 
 
 class BoardTests(unittest.TestCase):
     """docstring for ModelTests"""
 
     def setUp(self):
-        self.board = Board(8)
+        self.field = Field(8)
 
     def test_init(self):
-        self.assertEqual(str(self.board).replace('\n', ''), '........'
+        self.assertEqual(str(self.field).replace('\n', ''), '........'
                                                             '........'
                                                             '........'
                                                             '...OX...'
@@ -19,20 +19,13 @@ class BoardTests(unittest.TestCase):
                                                             '........'
                                                             '........')
 
-
-class TileTests(unittest.TestCase):
-    """docstring"""
-
-    def setUp(self):
-        self.tile = Tile()
-
-    def test_init(self):
-        self.assertEqual(self.tile.color, None)
-
     def test_flip(self):
-        self.tile = Tile(BLACK)
-        self.tile.flip()
-        self.assertEqual(self.tile.color, WHITE)
+        self.field.flip((3, 3))
+        self.assertEqual(self.field._white_count, 1)
+        self.assertEqual(self.field._black_count, 3)
+        self.assertEqual(self.field[3, 3], BLACK)
+        with self.assertRaises(TypeError):
+            self.field.flip((0, 0))
 
 
 if __name__ == '__main__':
