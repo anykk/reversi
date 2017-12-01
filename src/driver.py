@@ -1,11 +1,12 @@
 from src.game import *
+from time import sleep
 
 
 class Reversi(object):
     """Main class which contains rules of game."""
     def __init__(self, size=8, player=BLACK):
         self._field = Field(size)
-        self._current_player = player
+        self._current_player = player #flag
 
     def is_correct_move(self, coords):
         """Check that move is correct."""
@@ -38,7 +39,7 @@ class Reversi(object):
     def get_correct_moves(self):
         """Claim all possible correct moves."""
         correct_moves = []
-        size = len(self._field)
+        size = self._field.size()
 
         for x in range(size):
             for y in range(size):
@@ -48,7 +49,7 @@ class Reversi(object):
 
     def make_move(self, coords):
         """Make move and swap player flag."""
-        to_flip = self.is_correct_move(coords)
+        to_flip = list(self.is_correct_move(coords))
         if not to_flip:
             return
 
@@ -59,4 +60,8 @@ class Reversi(object):
 
     def ai_move(self):
         """AI makes move."""
-        pass
+        sleep(3)
+        print("kek ya shodil")
+
+    def field(self):
+        return self._field

@@ -16,6 +16,9 @@ class Field(object):
         self[self._size // 2, self._size // 2 - 1] = BLACK
         self[self._size // 2, self._size // 2] = WHITE
 
+    def field(self):
+        return self._field
+
     def is_full(self):
         """Check that field is full."""
         return self._white_count + self._black_count == self._size ** 2
@@ -34,6 +37,9 @@ class Field(object):
     def in_range(self, coords):
         """Check, that coordinates are correct."""
         return 0 <= coords[0] < self._size and 0 <= coords[1] < self._size
+
+    def piece_count(self):
+        return self._white_count, self._black_count
 
     def __getitem__(self, coords):
         """Get piece from field."""
@@ -57,8 +63,8 @@ class Field(object):
             repr_.append('\n')
         return ''.join(repr_)
 
-    def __len__(self):
-        return self._field.__len__()
+    def size(self):
+        return self._size
 
     def __iter__(self):
         return self._field.__iter__()
