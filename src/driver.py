@@ -1,21 +1,26 @@
-from src.game import *
 from time import sleep
+from random import choice
+from src.game import *
 
 
 class Reversi(object):
-    """Main class which contains rules of game."""
-    def __init__(self, size=8, player=BLACK):
+    """Main class which contains logic of the game."""
+    def __init__(self, size=8, player=BLACK, ai=True):
         self._field = Field(size)
-        self._current_player = player #flag
+        self._current_player = player
+        self._ai = ai
+
+    def current_player(self):
+        return self._current_player
 
     def is_correct_move(self, coords):
-        """Check that move is correct."""
+        """Checks that move is correct and returns pieces to flip if move is correct."""
         if self._field[coords] is not EMPTY and not self._field.in_range(coords):
             return False
 
         to_flip = []
-        other = get_opponent(self._current_player)
-        for dx, dy in DIRECTIONS:
+        other = self.get_opponent()
+        for dx, dy in self._field.directions():
             x, y = coords
             x += dx
             y += dy
@@ -56,12 +61,27 @@ class Reversi(object):
         for coord in to_flip:
             self._field.flip(coord)
         self._field[coords] = self._current_player
-        self._current_player = get_opponent(self._current_player)
+        self._current_player = self.get_opponent()
+
+    def ai(self):
+        """Returns AI flag."""
+        return self._ai
 
     def ai_move(self):
         """AI makes move."""
         sleep(3)
-        print("kek ya shodil")
+        possible_moves = self.get_correct_moves()
+        self.make_move(choice(possible_moves))
+
+    def get_opponent(self):
+        """Gets opponent to current player."""
+        if self._current_player == WHITE:
+            return BLACK
+        if self._current_player == BLACK:
+            return WHITE
+        else:
+            raise ValueError("Can't get opponent to this.")
 
     def field(self):
+        """Returns current field state of the game."""
         return self._field

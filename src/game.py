@@ -1,8 +1,12 @@
-from src.utils import *
+EMPTY = '.'
+WHITE = 'O'
+BLACK = 'X'
 
 
 class Field(object):
     """Class which represents game field."""
+    _DIRECTIONS = ((0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1), (-1, 0), (-1, 1))
+
     def __init__(self, size):
         """Initialize game field."""
         if size % 2 or size < 4:
@@ -15,9 +19,6 @@ class Field(object):
         self[self._size // 2 - 1, self._size // 2] = BLACK
         self[self._size // 2, self._size // 2 - 1] = BLACK
         self[self._size // 2, self._size // 2] = WHITE
-
-    def field(self):
-        return self._field
 
     def is_full(self):
         """Check that field is full."""
@@ -38,15 +39,20 @@ class Field(object):
         """Check, that coordinates are correct."""
         return 0 <= coords[0] < self._size and 0 <= coords[1] < self._size
 
-    def piece_count(self):
-        return self._white_count, self._black_count
+    def white_count(self):
+        """Get count of white pieces."""
+        return self._white_count
+
+    def black_count(self):
+        """Get count of black pieces"""
+        return self._black_count
 
     def __getitem__(self, coords):
         """Get piece from field."""
         return self._field[coords[0]][coords[1]]
 
     def __setitem__(self, coords, color):
-        """Set piece to field and inc score."""
+        """Set piece on the field and inc score."""
         self._field[coords[0]][coords[1]] = color
         self._white_count += 1 if color == WHITE else 0
         self._black_count += 1 if color == BLACK else 0
@@ -56,15 +62,18 @@ class Field(object):
         repr_ = []
         for row in self:
             for col in row:
-                if col is EMPTY:
-                    repr_.append('.')
-                else:
-                    repr_.append('X') if col is BLACK else repr_.append('O')
+                repr_.append(col)
             repr_.append('\n')
         return ''.join(repr_)
 
     def size(self):
+        """Get size of field."""
         return self._size
 
+    def directions(self):
+        """Get directions."""
+        return self._DIRECTIONS
+
     def __iter__(self):
+        """Iter trough the field."""
         return self._field.__iter__()
