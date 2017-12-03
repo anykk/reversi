@@ -1,5 +1,21 @@
 import sys
 from os import sep
+
+try:
+    from src.driver import *
+except Exception as e:
+    print("Game modules not found: \"{e}\"", file=sys.stderr)
+    sys.exit()
+
+try:
+    from PyQt5 import QtWidgets, QtGui, QtCore
+except Exception as e:
+    print(f"PyQt5 not found: \"{e}\". Please use pip install command for install this package.",
+          file=sys.stderr)
+    sys.exit()
+
+import sys
+from os import sep
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
@@ -7,17 +23,16 @@ from src.driver import *
 
 
 class MainWindow(QtWidgets.QWidget):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         self.setWindowTitle("Reversi")
         self.setFixedSize(640, 480)
         self.center()
 
-        game = Frame(parent=self)
-        game.setFrameStyle(QtWidgets.QFrame.Box)
+        game = Frame(8, BLACK, True, self)
 
         white_lcd = QtWidgets.QLCDNumber(self)
         black_lcd = QtWidgets.QLCDNumber(self)
@@ -92,71 +107,74 @@ class MainWindow(QtWidgets.QWidget):
 
 class Frame(QtWidgets.QFrame):
     """docstring"""
-    def __init__(self, parent=None, size=8, player=BLACK, ai=True):
-        super().__init__(parent=parent)
+
+    def __init__(self, size, player, ai, parent=None):
+        super().__init__(parent)
         self._game = Reversi(size, player, ai)
         self._game_over = False
+        self.setFixedSize(460, 460)
 
     def paintEvent(self, event):
+        # draw
         qp = QtGui.QPainter(self)
-        qp.fillRect(QtCore.QRect(0, 0, self.height() + 16, self.width() + 16), QtGui.QColor(51, 204, 51))
+        qp.setBrush(QtGui.QColor(255, 255, 204))
+        qp.drawRect(QtCore.QRectF(0, 0, self.height(), self.width()))
 
-        for i in range(self._game.field().size()):
-            x = self.width() / self._game.field().size() * i
+        for i in range(self._game.field.size):
+            # draw field lines
+            x = self.width() / self._game.field.size * i
             qp.drawLine(x, 0, x, self.height())
 
-            y = self.height() / self._game.field().size() * i
+            y = self.height() / self._game.field.size * i
             qp.drawLine(0, y, self.width(), y)
 
-        for height in range(self._game.field().size()):
-            for width in range(self._game.field().size()):
-                pieces_path = QtGui.QPainterPath()
-                w = self.width() / self._game.field().size()
-                h = self.height() / self._game.field().size()
+        for height in range(self._game.field.size):
+            for width in range(self._game.field.size):
+                # draw disks
+                w = self.width() / self._game.field.size
+                h = self.height() / self._game.field.size
 
-                x = w * width
                 y = h * height
+                x = w * width
 
-                bounding_rect = QtCore.QRectF(x, y, w, h)
+                rect = QtCore.QRectF(x, y, w, h)
 
-                piece = self._game.field()[height, width]
-                if piece == WHITE:
-                    pieces_path.addEllipse(bounding_rect)
-                    qp.fillPath(pieces_path, QtGui.QColor(255, 255, 255))
-                if piece == BLACK:
-                    pieces_path.addEllipse(bounding_rect)
-                    qp.fillPath(pieces_path, QtGui.QColor(0, 0, 0))
+                disk = self._game.field[height, width]
+                if disk == WHITE:
+                    qp.setBrush(QtGui.QColor(255, 255, 255))
+                    qp.drawEllipse(rect)
+                if disk == BLACK:
+                    qp.setBrush(QtGui.QColor(0, 0, 0))
+                    qp.drawEllipse(rect)
+
+        for y, x in self._game.get_correct_moves():
+            # draw possible moves
+            w = self.width() / self._game.field.size
+            h = self.height() / self._game.field.size
+            rect = QtCore.QRectF(x * w, y * h, w, h)
+            qp.setBrush(QtGui.QColor(255, 255, 153))
+            qp.drawRect(rect)
 
     def pixels_to_field(self, x, y):
-        field_width = self.width() // self._game.field().size()
-        field_height = self.height() // self._game.field().size()
-        return x // field_width, y // field_height
+        # x and y in window but y and x in Field [n*n list]
+        field_width = self.width() // self._game.field.size
+        field_height = self.height() // self._game.field.size
+        return y // field_height, x // field_width
 
     def mousePressEvent(self, event):
-        if self._game_over:
-            return
-
-        if not len(self._game.get_correct_moves()):
-            return
-
-        if self._game.ai() and self._game.current_player() == BLACK:
+        if not self._game_over:
             try:
-                coords = self.pixels_to_field(event.y(), event.x())
+                coords = (self.pixels_to_field(event.x(), event.y()))
                 self._game.make_move(coords)
-                self.repaint()
-                self._game.ai_move()
-                self.repaint()
-            except IndexError:
-                pass
-        else:
-            try:
-                self._game.ai_move()
+                if self._game.ai:
+                    self.repaint()
+                    self._game.ai_move()
                 self.update()
-                coords = self.pixels_to_field(event.y(), event.x())
-                self._game.make_move(coords)
+            except ValueError:
+                return
+            except RuntimeError:
+                self._game_over = True
                 self.update()
-            except IndexError:
-                pass
 
 
 if __name__ == "__main__":
