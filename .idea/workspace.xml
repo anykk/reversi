@@ -16,8 +16,13 @@
       <file leaf-file-name="game.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/game.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="986">
               <caret line="58" column="0" lean-forward="true" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+=======
+            <state relative-caret-position="1513">
+              <caret line="89" column="0" lean-forward="true" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+>>>>>>> c00ler_th4n
               <folding />
             </state>
           </provider>
@@ -26,8 +31,13 @@
       <file leaf-file-name="reversi.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/reversi.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="139">
               <caret line="140" column="0" lean-forward="true" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+=======
+            <state relative-caret-position="46">
+              <caret line="167" column="34" lean-forward="false" selection-start-line="167" selection-start-column="34" selection-end-line="167" selection-end-column="34" />
+>>>>>>> c00ler_th4n
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -39,9 +49,15 @@
         <entry file="file://$PROJECT_DIR$/src/driver.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="913">
+<<<<<<< HEAD
               <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
               <folding>
                 <marker date="1512322026445" expanded="true" signature="0:5" ph="import ..." />
+=======
+              <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+>>>>>>> c00ler_th4n
               </folding>
             </state>
           </provider>
@@ -51,7 +67,11 @@
         <entry file="file://$PROJECT_DIR$/src/tests.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="199">
+<<<<<<< HEAD
               <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+=======
+              <caret line="53" column="10" lean-forward="false" selection-start-line="53" selection-start-column="10" selection-end-line="53" selection-end-column="10" />
+>>>>>>> c00ler_th4n
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -67,6 +87,11 @@
         <option value="Python Script" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>piece</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -90,8 +115,10 @@
         <option value="$PROJECT_DIR$/src/tile.py" />
         <option value="$PROJECT_DIR$/src/board.py" />
         <option value="$PROJECT_DIR$/src/__init__.py" />
-        <option value="$PROJECT_DIR$/src/tests.py" />
+        <option value="$PROJECT_DIR$/src/utils.py" />
+        <option value="$PROJECT_DIR$/driver.py" />
         <option value="$PROJECT_DIR$/src/game.py" />
+        <option value="$PROJECT_DIR$/src/tests.py" />
         <option value="$PROJECT_DIR$/src/driver.py" />
         <option value="$PROJECT_DIR$/reversi.py" />
         <option value="$PROJECT_DIR$/game.py" />
@@ -142,7 +169,7 @@
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../pentix-master" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/kiril/Desktop/reversi/form.py" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/kiril/Desktop/reversi/src/driver.py" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -301,39 +328,43 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Nosetests_for_tests_TileTests_test_init - 2017.11.05 at 14h 17m 13s.xml">
-      <configuration name="Nosetests for tests.TileTests.test_init" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Nosetests_in_tests_py - 2017.11.05 at 14h 17m 23s.xml">
-      <configuration name="Nosetests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Nosetests_in_tests_py - 2017.11.05 at 14h 18m 29s.xml">
-      <configuration name="Nosetests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Nosetests_in_tests_py - 2017.11.05 at 14h 18m 50s.xml">
-      <configuration name="Nosetests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Nosetests_in_tests_py - 2017.11.22 at 22h 04m 13s.xml">
-      <configuration name="Nosetests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Nosetests_in_tests_py - 2017.11.22 at 22h 08m 10s.xml">
-      <configuration name="Nosetests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Nosetests_in_tests_py - 2017.11.27 at 21h 47m 20s.xml">
-      <configuration name="Nosetests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unnamed - 2017.11.27 at 21h 52m 26s.xml">
+    <history-entry file="Unnamed - 2017.12.02 at 22h 31m 59s.xml">
       <configuration name="Unnamed" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unnamed - 2017.11.27 at 21h 53m 50s.xml">
+    <history-entry file="Unnamed - 2017.12.02 at 22h 32m 48s.xml">
       <configuration name="Unnamed" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unnamed - 2017.11.28 at 12h 55m 50s.xml">
+    <history-entry file="Unnamed - 2017.12.02 at 22h 33m 07s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2017.12.02 at 22h 36m 15s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2017.12.02 at 22h 40m 47s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2017.12.02 at 22h 41m 09s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2017.12.03 at 21h 15m 25s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2017.12.03 at 21h 15m 37s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2017.12.03 at 22h 05m 23s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2017.12.03 at 22h 05m 32s.xml">
       <configuration name="Unnamed" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+<<<<<<< HEAD
+=======
+    <editor active="true" />
+>>>>>>> c00ler_th4n
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23600605" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -341,7 +372,11 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34210527" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34210527" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+>>>>>>> c00ler_th4n
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -358,9 +393,12 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34210527" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+<<<<<<< HEAD
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22844176" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+=======
+>>>>>>> c00ler_th4n
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39967105" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -379,7 +417,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="3" />
+      <option name="time" value="4" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -393,6 +431,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tile.py" />
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -400,6 +439,9 @@
         </state>
       </provider>
     </entry>
+=======
+    <entry file="file://$PROJECT_DIR$/src/utils.py" />
+>>>>>>> c00ler_th4n
     <entry file="file://$PROJECT_DIR$/reversi.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -429,6 +471,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tile.py" />
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -436,6 +479,9 @@
         </state>
       </provider>
     </entry>
+=======
+    <entry file="file://$PROJECT_DIR$/src/utils.py" />
+>>>>>>> c00ler_th4n
     <entry file="file://$PROJECT_DIR$/reversi.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -465,6 +511,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tile.py" />
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -472,6 +519,9 @@
         </state>
       </provider>
     </entry>
+=======
+    <entry file="file://$PROJECT_DIR$/src/utils.py" />
+>>>>>>> c00ler_th4n
     <entry file="file://$PROJECT_DIR$/reversi.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -501,6 +551,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tile.py" />
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -508,6 +559,9 @@
         </state>
       </provider>
     </entry>
+=======
+    <entry file="file://$PROJECT_DIR$/src/utils.py" />
+>>>>>>> c00ler_th4n
     <entry file="file://$PROJECT_DIR$/reversi.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -537,6 +591,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tile.py" />
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -544,6 +599,9 @@
         </state>
       </provider>
     </entry>
+=======
+    <entry file="file://$PROJECT_DIR$/src/utils.py" />
+>>>>>>> c00ler_th4n
     <entry file="file://$PROJECT_DIR$/reversi.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -583,6 +641,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tile.py" />
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -590,6 +649,9 @@
         </state>
       </provider>
     </entry>
+=======
+    <entry file="file://$PROJECT_DIR$/src/utils.py" />
+>>>>>>> c00ler_th4n
     <entry file="file://$PROJECT_DIR$/src/tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
@@ -659,20 +721,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils.py" />
     <entry file="file://$PROJECT_DIR$/src/tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
+<<<<<<< HEAD
           <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+=======
+          <caret line="53" column="10" lean-forward="false" selection-start-line="53" selection-start-column="10" selection-end-line="53" selection-end-column="10" />
+>>>>>>> c00ler_th4n
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="11" lean-forward="false" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="11" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/game.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1513">
+          <caret line="89" column="0" lean-forward="true" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+          <folding />
+>>>>>>> c00ler_th4n
         </state>
       </provider>
     </entry>
@@ -680,17 +755,28 @@
     <entry file="file://$PROJECT_DIR$/src/driver.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="913">
+<<<<<<< HEAD
           <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
           <folding>
             <marker date="1512322026445" expanded="true" signature="0:5" ph="import ..." />
+=======
+          <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+>>>>>>> c00ler_th4n
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/reversi.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="139">
           <caret line="140" column="0" lean-forward="true" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+=======
+        <state relative-caret-position="46">
+          <caret line="167" column="34" lean-forward="false" selection-start-line="167" selection-start-column="34" selection-end-line="167" selection-end-column="34" />
+>>>>>>> c00ler_th4n
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

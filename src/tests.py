@@ -1,9 +1,9 @@
 import unittest
 
-from game import *
+from src.driver import *
 
 
-class BoardTests(unittest.TestCase):
+class FieldTests(unittest.TestCase):
     """docstring for ModelTests"""
 
     def setUp(self):
@@ -21,11 +21,37 @@ class BoardTests(unittest.TestCase):
 
     def test_flip(self):
         self.field.flip((3, 3))
-        self.assertEqual(self.field._white_count, 1)
-        self.assertEqual(self.field._black_count, 3)
+        self.assertEqual(self.field.white_count, 1)
+        self.assertEqual(self.field.black_count, 3)
         self.assertEqual(self.field[3, 3], BLACK)
         with self.assertRaises(TypeError):
             self.field.flip((0, 0))
+
+    def test_in_range(self):
+        self.assertTrue(self.field.in_range((7, 7)))
+        self.assertTrue(self.field.in_range((0, 5)))
+        self.assertTrue(self.field.in_range((5, 3)))
+        self.assertFalse(self.field.in_range((8, 7)))
+        self.assertFalse(self.field.in_range((0, 8)))
+        self.assertFalse(self.field.in_range((-1, 0)))
+
+    def test_set_and_get(self):
+        self.field[0, 0] = WHITE
+        self.field[2, 3] = BLACK
+        self.assertEqual(self.field.black_count, 3)
+        self.assertEqual(self.field.white_count, 3)
+        self.assertEqual(self.field[0, 0], WHITE)
+        self.assertEqual(self.field[2, 3], BLACK)
+
+
+class ReversiTests(unittest.TestCase):
+    def setUp(self):
+        self.reversi = Reversi()
+
+    def test_correct_moves(self):
+        self.assertEqual(self.reversi.get_correct_moves(), [(2, 3), (3, 2), (4, 5), (5, 4)])
+        self.reversi.make_move((2, 3))
+        # self.assertEqual(self.reversi.get_correct_moves(), )
 
 
 if __name__ == '__main__':
