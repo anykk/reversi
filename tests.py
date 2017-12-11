@@ -1,6 +1,5 @@
 import unittest
-
-from src.driver import *
+from driver import *
 
 
 class FieldTests(unittest.TestCase):
@@ -18,6 +17,10 @@ class FieldTests(unittest.TestCase):
                                                             '........'
                                                             '........'
                                                             '........')
+
+    def test_error(self):
+        with self.assertRaises(IllegalArgumentError):
+            self.field = Field(3)
 
     def test_flip(self):
         self.field.flip((3, 3))
@@ -46,12 +49,21 @@ class FieldTests(unittest.TestCase):
 
 class ReversiTests(unittest.TestCase):
     def setUp(self):
-        self.reversi = Reversi()
+        self.reversi = Reversi(8, BLACK, "AI", "Easy")
 
     def test_correct_moves(self):
         self.assertEqual(self.reversi.get_correct_moves(), [(2, 3), (3, 2), (4, 5), (5, 4)])
         self.reversi.make_move((2, 3))
-        # self.assertEqual(self.reversi.get_correct_moves(), )
+        self.assertEqual(self.reversi.get_correct_moves(), [(2, 2), (2, 4), (4, 2)])
+
+    def test_game_over(self):
+        self.reversi._field._skeleton = [['X' for _ in range(8)] for _ in range(8)]
+        with self.assertRaises(GameOverException):
+            self.reversi.next_player()
+
+    def test_move_error(self):
+        with self.assertRaises(MoveError):
+            self.reversi.make_move((0, 0))
 
 
 if __name__ == '__main__':
