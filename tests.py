@@ -49,7 +49,7 @@ class FieldTests(unittest.TestCase):
 
 class ReversiTests(unittest.TestCase):
     def setUp(self):
-        self.reversi = Reversi(8, BLACK, "AI", "Easy")
+        self.reversi = Reversi()
 
     def test_correct_moves(self):
         self.assertEqual(self.reversi.get_correct_moves(), [(2, 3), (3, 2), (4, 5), (5, 4)])

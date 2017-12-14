@@ -1,9 +1,9 @@
 from exceptions import IllegalArgumentError
 
-
 BLACK = 'X'
 WHITE = 'O'
 EMPTY = '.'
+EXTRA = 'E'
 
 
 class Field:

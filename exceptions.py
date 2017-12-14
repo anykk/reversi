@@ -43,6 +43,6 @@ class LoadError(Exception):
         return f"LoadError: {self.message}."
 
 
-class NextPlayerException(Exception):
+class NoMovesException(Exception):
     """It throws when next player can't move."""
     pass

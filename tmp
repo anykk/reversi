@@ -1,0 +1,116 @@
+"""
+class StartDialog(QtWidgets.QDialog):
+    """docstring"""
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self._params = {}
+        main_layout = QtWidgets.QVBoxLayout(self)
+
+        size_label = QtWidgets.QLabel("Choose field size: ", self)
+        self.size_box = QtWidgets.QSpinBox(self)
+        self.size_box.valueChanged.connect(self.size)
+        self.size_box.setValue(8)
+
+        main_layout.addWidget(size_label)
+        main_layout.addWidget(self.size_box)
+
+        color_box = QtWidgets.QGroupBox("Choose color: ", self)
+        color_layout = QtWidgets.QHBoxLayout(color_box)
+        black_button = QtWidgets.QRadioButton("Black", color_box)
+        black_button.toggled.connect(self.black)
+        white_button = QtWidgets.QRadioButton("White", color_box)
+        white_button.toggled.connect(self.white)
+        black_button.setChecked(True)
+
+        color_box.setLayout(color_layout)
+
+        color_layout.addWidget(black_button)
+        color_layout.addWidget(white_button)
+
+        main_layout.addWidget(color_box)
+
+        """
+        self.type_box = QtWidgets.QGroupBox("Choose type: ", self)
+        self.type_layout = QtWidgets.QHBoxLayout(self.type_box)
+        self.color_box.setLayout(self.type_layout)
+        """
+
+        mode_box = QtWidgets.QGroupBox("Choose opponent: ", self)
+        mode_layout = QtWidgets.QHBoxLayout(mode_box)
+        ai_button = QtWidgets.QRadioButton("AI", mode_box)
+        ai_button.toggled.connect(self.ai)
+        hot_seat_button = QtWidgets.QRadioButton("HotSeat", mode_box)
+        hot_seat_button.toggled.connect(self.hot_seat)
+        ai_button.setChecked(True)
+
+        color_box.setLayout(mode_layout)
+
+        mode_layout.addWidget(ai_button)
+        mode_layout.addWidget(hot_seat_button)
+
+        main_layout.addWidget(mode_box)
+
+        self.ok_button = QtWidgets.QPushButton("Ok", self)
+        self.ok_button.clicked.connect(self.create_game)
+        cancel_button = QtWidgets.QPushButton("Cancel", self)
+        cancel_button.clicked.connect(self.close)
+
+        main_layout.addWidget(self.ok_button)
+        main_layout.addWidget(cancel_button)
+
+        self.setLayout(main_layout)
+        self.init_ui()
+
+    def init_ui(self):
+        self.setWindowTitle("Config")
+        """
+
+        ui
+
+        """
+
+    def size(self):
+        self._params["size"] = int(self.size_box.value())
+
+    def black(self):
+        self._params["player"] = BLACK
+
+    def white(self):
+        self._params["player"] = WHITE
+
+    def ai(self):
+        self._params["opponent"] = "AI"
+
+    def hot_seat(self):
+        self._params["opponent"] = "HotSeat"
+
+    def create_game(self):
+        self.close()
+        return Reversi(*self._params.values())
+"""
+
+    def save(self, filename):
+        try:
+            with open(filename, "w", encoding="utf-8",) as file:
+                json.dump({"current_player": self._current_player,
+                           "Field": {"skeleton": self.field.skeleton, "size": self.field.size,
+                                     "black_count": self.field.black_count, "white_count": self.field.white_count},
+                           "mode": self._opponent, "lvl": self._lvl}, file, indent=4, ensure_ascii=False)
+                LOGGER.info(f"Game was saved in '{filename}' file.")
+        except Exception as e:
+            LOGGER.error(f"Error when was trying save game: {e}")
+            raise SaveError(e)
+
+    def load(self, filename):
+        try:
+            with open(filename, "r", encoding="utf-8") as file:
+                game = json.load(file)
+            self.field._skeleton, self.field._size, self.field._black_count, self.field._white_count = game[
+                "Field"].values()
+            self._current_player = game["current_player"]
+            self._opponent = game["mode"]
+            self._lvl = game["lvl"]
+            LOGGER.info(f"Game was loaded from '{filename}' file.")
+        except Exception as e:
+            LOGGER.error(f"Error when was trying load game: {e}")
+            raise LoadError(e)
