@@ -1,12 +1,12 @@
 from time import sleep
 from random import choice
 from game import *
-from exceptions import GameOverException, NoMovesException, MoveError
+from exceptions import GameOverException, NoMovesException, MoveError, SaveError, LoadError
 
 
 class Reversi:
     """Main class which contains logic of the game."""
-    def __init__(self, size=8, player=BLACK, mode="Classic", opponent="Human", lvl="Easy"):
+    def __init__(self, size=8, player=BLACK, mode="Classic", opponent="Human", lvl=None):
         self._field = Field(size)
         self._current_player = player
         self._mode = mode
@@ -68,14 +68,12 @@ class Reversi:
 
     def make_move(self, coords):
         """Make move and swap player flag."""
-        print(self._current_player)
         to_flip = self.is_correct_move(coords)
         if to_flip:
             for coord in list(to_flip):
                 self._field.flip(coord)
             self._field[coords] = self._current_player
             self.next_player()
-            print(self._current_player)
         else:
             raise MoveError(f"{self._current_player} tried to make move with wrong coords: {coords}.")
 
@@ -89,7 +87,6 @@ class Reversi:
         sleep(1)
         if self._lvl == "Easy":
             possible_moves = self.get_correct_moves()
-            print(possible_moves)
             self.make_move(possible_moves[0])
         elif self._lvl == "Medium":
             possible_moves = self.get_correct_moves()

@@ -3,7 +3,7 @@ import logging
 import pickle
 
 MAIN_LOG = logging.getLogger("reversi")
-logging.basicConfig(filename="reversi.log")
+logging.basicConfig(filename="main.log")
 
 try:
     from driver import *
@@ -22,12 +22,11 @@ except Exception as e:
 
 
 class MainWindow(QtWidgets.QWidget):
-    """docstring"""
+    """Main reversi window."""
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.central = Frame(Reversi())
+        self.central = Frame(Reversi(), self)
         self._new_game()
-        # self._start_params = params
         self.init_ui()
 
     def init_ui(self):
@@ -36,7 +35,12 @@ class MainWindow(QtWidgets.QWidget):
         self.center()
 
         white_lcd = QtWidgets.QLCDNumber(self)
+        self.central.white_score_msg[str].connect(white_lcd.display)
         black_lcd = QtWidgets.QLCDNumber(self)
+        self.central.black_score_msg[str].connect(black_lcd.display)
+
+        current_turn_label = QtWidgets.QLabel(f"Current turn: kek", self) #fix
+        self.central.current_player_msg[str].connect(current_turn_label.setText)
 
         white_label = QtWidgets.QLabel("White:", self)
         black_label = QtWidgets.QLabel("Black:", self)
@@ -45,6 +49,7 @@ class MainWindow(QtWidgets.QWidget):
         button_restart = QtWidgets.QPushButton("Restart")
         button_save_game = QtWidgets.QPushButton("Save")
         button_load_game = QtWidgets.QPushButton("Load")
+        button_about = QtWidgets.QPushButton("About")
         button_exit = QtWidgets.QPushButton("Exit")
 
         layout = QtWidgets.QGridLayout()
@@ -53,10 +58,11 @@ class MainWindow(QtWidgets.QWidget):
         black_label.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignBottom)
 
         layout.addWidget(self.central, 0, 0, 48, 48)
-        layout.addWidget(white_label, 1, 50, 3, 9)
-        layout.addWidget(white_lcd, 4, 50, 5, 9)
-        layout.addWidget(black_label, 13, 50, 3, 9)
-        layout.addWidget(black_lcd, 16, 50, 5, 9)
+        layout.addWidget(current_turn_label, 1, 50, 2, 9)
+        layout.addWidget(white_label, 3, 50, 3, 9)
+        layout.addWidget(white_lcd, 7, 50, 5, 9)
+        layout.addWidget(black_label, 14, 50, 3, 9)
+        layout.addWidget(black_lcd, 18, 50, 5, 9)
 
         self.central.setFocusPolicy(QtCore.Qt.StrongFocus)
 
@@ -64,12 +70,14 @@ class MainWindow(QtWidgets.QWidget):
         layout.addWidget(button_restart, 28, 50, 3, 9)
         layout.addWidget(button_save_game, 31, 50, 3, 9)
         layout.addWidget(button_load_game, 34, 50, 3, 9)
-        layout.addWidget(button_exit, 37, 50, 3, 9)
+        layout.addWidget(button_about, 37, 50, 3, 9)
+        layout.addWidget(button_exit, 40, 50, 3, 9)
 
         button_new_game.clicked.connect(self._new_game)
         button_restart.clicked.connect(self._restart)
         button_save_game.clicked.connect(self._save)
         button_load_game.clicked.connect(self._load)
+        button_about.clicked.connect(self._about)
         button_exit.clicked.connect(self.close)
 
         self.setLayout(layout)
@@ -81,13 +89,14 @@ class MainWindow(QtWidgets.QWidget):
         self.move(qr.topLeft())
 
     def _new_game(self):
-        """Create new game with choosed parameters."""
+        """Create new game with chose parameters."""
         self.hide()
         dialog = StartDialog()
         if dialog.exec() != 1:
             self._start_params = dialog.params
             dialog.destroy()
             self.central._game = Reversi(**self._start_params)
+            self.update()
             self.show()
 
     def _restart(self):
@@ -96,38 +105,54 @@ class MainWindow(QtWidgets.QWidget):
         self.update()
 
     def _save(self):
-        """Save game to .game file."""
+        """Save game to .dat file."""
         filename, _ = QtWidgets.QFileDialog(self).getSaveFileName(self, "Save game",
                                                                   f"game_name",
-                                                                  "JSON files (*.game)")
+                                                                  "DAT files (*.dat)")
         try:
             if filename:
-                self.central.game.save(filename)
-        except SaveError as e:
-            MAIN_LOG.error(e)
-            QtWidgets.QMessageBox.warning(self, "Error", f"Save error: {e}.", QtWidgets.QMessageBox.Ok)
+                with open(filename, 'wb') as file:
+                    pickle.dump(self.central.game, file)
+        except SaveError as exception:
+            MAIN_LOG.error(exception)
+            QtWidgets.QMessageBox.warning(self, "Error", f"Save error: {exception}.", QtWidgets.QMessageBox.Ok)
 
     def _load(self):
-        """Load game from .game file"""
+        """Load game from .dat file"""
         filename, _ = QtWidgets.QFileDialog(self).getOpenFileName(self, "Load game",
                                                                   f"game_name",
-                                                                  "JSON files (*.game)")
+                                                                  "DAT files (*.dat)")
         try:
             if filename:
-                self.central.game.load(filename)
-        except LoadError as e:
-            MAIN_LOG.error(e)
+                with open(filename, 'rb') as file:
+                    object_ = pickle.load(file)
+                    if not type(object_) == Reversi:
+                        raise LoadError("Incorrect .dat game file.")
+                    self.central._game = object_
+                    self.update()
+        except LoadError as exception:
+            MAIN_LOG.error(exception)
+            QtWidgets.QMessageBox.warning(self, "Error", f"Save error: {exception}.", QtWidgets.QMessageBox.Ok)
 
     def _about(self):
-        # help
-        print("help")
+        QtWidgets.QMessageBox.information(self, "About the game",
+                                          "This is python implementation of the Reversi/Othello game. "
+                                          "You have simple rules if you chose classic mode: you can place "
+                                          "your disk only any through a continuous series of opponent's disks, "
+                                          "after them, you flip it and up your score. In extra mode both of players "
+                                          "have different count of common disks - strategic blocks. Their count is "
+                                          "limited, it depends on field size.",
+                                          QtWidgets.QMessageBox.Ok)
 
 
 class Frame(QtWidgets.QFrame):
-    """docstring"""
+    """Game widget."""
+    white_score_msg = QtCore.pyqtSignal(str)
+    black_score_msg = QtCore.pyqtSignal(str)
+    current_player_msg = QtCore.pyqtSignal(str)
+
     def __init__(self, driver, parent=None):
         super().__init__(parent)
-        self._score_signal = QtCore.pyqtSignal(tuple)
         self._game = driver
         self.setFixedSize(460, 460)
 
@@ -135,8 +160,18 @@ class Frame(QtWidgets.QFrame):
     def game(self):
         return self._game
 
+    def send_current_player(self):
+        """Send current player to main window."""
+        message = "Current turn: Black" if self._game.current_player == BLACK else "Current turn: White"
+        self.current_player_msg.emit(message)
+
+    def send_score(self):
+        """Send score to main window."""
+        self.white_score_msg.emit(str(self._game.field.white_count))
+        self.black_score_msg.emit(str(self._game.field.black_count))
+
     def paintEvent(self, event):
-        # draw
+        # draw background
         qp = QtGui.QPainter(self)
         qp.setBrush(QtGui.QColor(255, 255, 204))
         qp.drawRect(QtCore.QRectF(0, 0, self.height(), self.width()))
@@ -185,22 +220,32 @@ class Frame(QtWidgets.QFrame):
     def mousePressEvent(self, event):
         try:
             coords = (self.pixels_to_field(event.x(), event.y()))
+            self.send_current_player()
             self._game.make_move(coords)
+            self.send_score()
             self.repaint()
             if self._game.opponent == "Ai":
                 try:
+                    self.send_current_player()
                     self._game.ai_move()
+                    self.send_score()
                 except NoMovesException:
-                    QtWidgets.QMessageBox.warning(self, "Warning", "Next player can't move.", QtWidgets.QMessageBox.Ok)
+                    QtWidgets.QMessageBox.warning(self, "Warning",
+                                                  "Next player can't move.", QtWidgets.QMessageBox.Ok)
+                    self.send_current_player()
                     self._game.ai_move()
+                    self.send_score()
                 self.repaint()
         except NoMovesException:
-            QtWidgets.QMessageBox.warning(self, "Warning", "Next player can't move.", QtWidgets.QMessageBox.Ok)
+            QtWidgets.QMessageBox.warning(self, "Warning",
+                                          "Next player can't move.", QtWidgets.QMessageBox.Ok)
             return
         except MoveError:
             return
         except GameOverException:
-            QtWidgets.QMessageBox.warning(self, "Game over", "Player won.", QtWidgets.QMessageBox.Ok)
+            winner = 'Black' if self._game.field.black_count > self._game.field.white_count else 'White'
+            QtWidgets.QMessageBox.information(self, "Game over",
+                                              f"'{winner} is winner.", QtWidgets.QMessageBox.Ok)
 
 
 class StartDialog(QtWidgets.QDialog):
@@ -212,6 +257,7 @@ class StartDialog(QtWidgets.QDialog):
 
     @property
     def params(self):
+        """Returns params from dialog."""
         return self._params
 
     def init_ui(self):
@@ -285,11 +331,8 @@ class StartDialog(QtWidgets.QDialog):
 
         self.ok_button = QtWidgets.QPushButton("Ok", self)
         self.ok_button.clicked.connect(self.close)
-        self.cancel_button = QtWidgets.QPushButton("Cancel", self)
-        self.cancel_button.clicked.connect(self.close)
 
         main_layout.addWidget(self.ok_button)
-        main_layout.addWidget(self.cancel_button)
 
         self.setLayout(main_layout)
         self.show()
@@ -347,9 +390,4 @@ class StartDialog(QtWidgets.QDialog):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     game = MainWindow()
-    # dialog = StartDialog()
-    # if dialog.exec() != 1:
-    #     main = MainWindow(dialog.params)
-    #     dialog.destroy()
-    #     main.show()
     sys.exit(app.exec())

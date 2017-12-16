@@ -1,9 +1,9 @@
 from exceptions import IllegalArgumentError
 
+EXTRA = 'E'
 BLACK = 'X'
 WHITE = 'O'
 EMPTY = '.'
-EXTRA = 'E'
 
 
 class Field:
@@ -18,6 +18,7 @@ class Field:
         self._skeleton = [[EMPTY for _ in range(self._size)] for _ in range(self._size)]
         self._black_count = 0
         self._white_count = 0
+        self._extra_count = 0
         self.set_up()
 
     def set_up(self):
@@ -45,7 +46,7 @@ class Field:
     @property
     def is_full(self):
         """Check that field is full."""
-        return self._white_count + self._black_count == self._size ** 2
+        return self._white_count + self._black_count + self._extra_count == self._size ** 2
 
     def flip(self, coords):
         """Flip disk. It mean that disk changes its color."""
@@ -69,8 +70,13 @@ class Field:
 
     @property
     def black_count(self):
-        """Get count of black disks"""
+        """Get count of black disks."""
         return self._black_count
+
+    @property
+    def extra_count(self):
+        """Get count of extra disks."""
+        return self._extra_count
 
     def __getitem__(self, coords):
         """Get disk from field."""

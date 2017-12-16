@@ -20,7 +20,7 @@ class FieldTests(unittest.TestCase):
 
     def test_error(self):
         with self.assertRaises(IllegalArgumentError):
-            self.field = Field(3)
+            self.field = Field(9)
 
     def test_flip(self):
         self.field.flip((3, 3))
