@@ -14,9 +14,24 @@ class Reversi:
         self._lvl = lvl
 
     @property
+    def winner(self):
+        """Returns winner."""
+        if self._field.black_count > self._field.white_count:
+            return "Black won!"
+        elif self._field.white_count > self._field.black_count:
+            return "White won!"
+        else:
+            return "Draw!"
+
+    @property
     def current_player(self):
         """Returns current player flag(color)."""
         return self._current_player
+
+    @property
+    def str_player(self):
+        """Returns string player name."""
+        return "Black" if self._current_player == BLACK else "White"
 
     @property
     def field(self):
