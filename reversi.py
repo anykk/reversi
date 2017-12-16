@@ -1,10 +1,9 @@
 import sys
 import logging
-
+import pickle
 
 MAIN_LOG = logging.getLogger("reversi")
 logging.basicConfig(filename="reversi.log")
-
 
 try:
     from driver import *
@@ -26,14 +25,15 @@ class MainWindow(QtWidgets.QWidget):
     """docstring"""
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.central = Frame(Reversi())
+        self._new_game()
+        # self._start_params = params
         self.init_ui()
 
     def init_ui(self):
         self.setWindowTitle("Reversi")
         self.setFixedSize(640, 480)
         self.center()
-
-        self.central = Frame(Reversi(size=4, opponent="Ai"), self)
 
         white_lcd = QtWidgets.QLCDNumber(self)
         black_lcd = QtWidgets.QLCDNumber(self)
@@ -73,7 +73,6 @@ class MainWindow(QtWidgets.QWidget):
         button_exit.clicked.connect(self.close)
 
         self.setLayout(layout)
-        self.show()
 
     def center(self):
         qr = self.frameGeometry()
@@ -82,18 +81,25 @@ class MainWindow(QtWidgets.QWidget):
         self.move(qr.topLeft())
 
     def _new_game(self):
-        # dialog
-        # parameters
-        pass
+        """Create new game with choosed parameters."""
+        self.hide()
+        dialog = StartDialog()
+        if dialog.exec() != 1:
+            self._start_params = dialog.params
+            dialog.destroy()
+            self.central._game = Reversi(**self._start_params)
+            self.show()
 
     def _restart(self):
-        # new Frame with start parameters
-        pass
+        """Restart game with start parameters."""
+        self.central._game = Reversi(**self._start_params)
+        self.update()
 
     def _save(self):
+        """Save game to .game file."""
         filename, _ = QtWidgets.QFileDialog(self).getSaveFileName(self, "Save game",
                                                                   f"game_name",
-                                                                  "JSON files (*.json)")
+                                                                  "JSON files (*.game)")
         try:
             if filename:
                 self.central.game.save(filename)
@@ -102,9 +108,10 @@ class MainWindow(QtWidgets.QWidget):
             QtWidgets.QMessageBox.warning(self, "Error", f"Save error: {e}.", QtWidgets.QMessageBox.Ok)
 
     def _load(self):
+        """Load game from .game file"""
         filename, _ = QtWidgets.QFileDialog(self).getOpenFileName(self, "Load game",
                                                                   f"game_name",
-                                                                  "JSON files (*.json)")
+                                                                  "JSON files (*.game)")
         try:
             if filename:
                 self.central.game.load(filename)
@@ -196,9 +203,153 @@ class Frame(QtWidgets.QFrame):
             QtWidgets.QMessageBox.warning(self, "Game over", "Player won.", QtWidgets.QMessageBox.Ok)
 
 
+class StartDialog(QtWidgets.QDialog):
+    """Start dialog window"""
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self._params = {}
+        self.init_ui()
+
+    @property
+    def params(self):
+        return self._params
+
+    def init_ui(self):
+        self.setWindowTitle("Config")
+        main_layout = QtWidgets.QVBoxLayout(self)
+
+        self.size_label = QtWidgets.QLabel("Choose field size: ", self)
+        self.size_box = QtWidgets.QSpinBox(self)
+        self.size_box.valueChanged.connect(self.set_size_value)
+        self.size_box.setValue(8)
+
+        main_layout.addWidget(self.size_label)
+        main_layout.addWidget(self.size_box)
+
+        player_box = QtWidgets.QGroupBox("Choose first player: ", self)
+        player_layout = QtWidgets.QHBoxLayout(player_box)
+        self.black_button = QtWidgets.QRadioButton("Black", player_box)
+        self.black_button.toggled.connect(self.set_black)
+        self.white_button = QtWidgets.QRadioButton("White", player_box)
+        self.white_button.toggled.connect(self.set_white)
+        self.black_button.setChecked(True)
+
+        player_layout.addWidget(self.black_button)
+        player_layout.addWidget(self.white_button)
+        player_box.setLayout(player_layout)
+
+        main_layout.addWidget(player_box)
+
+        mode_box = QtWidgets.QGroupBox("Choose game mode: ", self)
+        mode_layout = QtWidgets.QHBoxLayout(mode_box)
+        self.classic_button = QtWidgets.QRadioButton("Classic", mode_box)
+        self.classic_button.toggled.connect(self.set_classic)
+        self.extra_button = QtWidgets.QRadioButton("Extra", mode_box)
+        self.extra_button.toggled.connect(self.set_extra)
+        self.classic_button.setChecked(True)
+
+        mode_layout.addWidget(self.classic_button)
+        mode_layout.addWidget(self.extra_button)
+        mode_box.setLayout(mode_layout)
+
+        main_layout.addWidget(mode_box)
+
+        opponent_box = QtWidgets.QGroupBox("Choose opponent type: ", self)
+        opponent_layout = QtWidgets.QHBoxLayout(opponent_box)
+        self.ai_button = QtWidgets.QRadioButton("AI", opponent_box)
+        self.ai_button.toggled.connect(self.set_ai)
+        self.human_button = QtWidgets.QRadioButton("Human", opponent_box)
+        self.human_button.toggled.connect(self.set_human)
+        self.ai_button.setChecked(True)
+
+        opponent_layout.addWidget(self.ai_button)
+        opponent_layout.addWidget(self.human_button)
+        opponent_box.setLayout(opponent_layout)
+
+        main_layout.addWidget(opponent_box)
+
+        lvl_box = QtWidgets.QGroupBox("Choose AI lvl: ", self)
+        lvl_layout = QtWidgets.QHBoxLayout(lvl_box)
+        self.easy_button = QtWidgets.QRadioButton("Easy", lvl_box)
+        self.easy_button.toggled.connect(self.set_easy)
+        self.medium_button = QtWidgets.QRadioButton("Medium", lvl_box)
+        self.medium_button.toggled.connect(self.set_medium)
+        self.hard_button = QtWidgets.QRadioButton("Hard", lvl_box)
+        self.hard_button.toggled.connect(self.set_hard)
+
+        lvl_layout.addWidget(self.easy_button)
+        lvl_layout.addWidget(self.medium_button)
+        lvl_layout.addWidget(self.hard_button)
+
+        main_layout.addWidget(lvl_box)
+
+        self.ok_button = QtWidgets.QPushButton("Ok", self)
+        self.ok_button.clicked.connect(self.close)
+        self.cancel_button = QtWidgets.QPushButton("Cancel", self)
+        self.cancel_button.clicked.connect(self.close)
+
+        main_layout.addWidget(self.ok_button)
+        main_layout.addWidget(self.cancel_button)
+
+        self.setLayout(main_layout)
+        self.show()
+
+    def set_size_value(self):
+        """Store size value."""
+        self._params["size"] = int(self.size_box.value())
+
+    def set_black(self):
+        """Set player parameter to black."""
+        self._params["player"] = BLACK
+
+    def set_white(self):
+        """Set player parameter to white."""
+        self._params["player"] = WHITE
+
+    def set_ai(self):
+        """Set opponent parameter to AI."""
+        self._params["opponent"] = "Ai"
+
+    def set_human(self):
+        """Set opponent parameter to Human."""
+        self._params["opponent"] = "Human"
+
+    def set_classic(self):
+        """Set mode parameter to classic."""
+        self._params["mode"] = "Classic"
+
+    def set_extra(self):
+        """Set mode parameter to extra."""
+        self._params["mode"] = "Extra"
+
+    def set_easy(self):
+        """Set AI lvl to easy."""
+        if not self.ai_button.isChecked():
+            self.easy_button.setCheckable(False)
+        self.easy_button.setCheckable(True)
+        self._params["lvl"] = "Easy"
+
+    def set_medium(self):
+        """Set AI lvl to medium."""
+        if not self.ai_button.isChecked():
+            self.medium_button.setCheckable(False)
+        self.medium_button.setCheckable(True)
+        self._params["lvl"] = "Medium"
+
+    def set_hard(self):
+        """Set AI lvl to hard."""
+        if not self.ai_button.isChecked():
+            self.hard_button.setCheckable(False)
+        self.hard_button.setCheckable(True)
+        self._params["lvl"] = "Hard"
+
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    reversi = MainWindow()
-    # a = Frame(Reversi(size=4, opponent="Ai"))
-    # a.show()
+    game = MainWindow()
+    # dialog = StartDialog()
+    # if dialog.exec() != 1:
+    #     main = MainWindow(dialog.params)
+    #     dialog.destroy()
+    #     main.show()
     sys.exit(app.exec())
