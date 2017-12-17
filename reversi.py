@@ -2,29 +2,27 @@ import sys
 import logging
 import pickle
 
-MAIN_LOG = logging.getLogger("reversi")
-logging.basicConfig(filename="main.log")
+LOGGER = logging.getLogger("reversi")
+logging.basicConfig(filename="reversi.log", level=logging.INFO)
 
 try:
     from driver import *
 except Exception as e:
-    print(f"Game modules not found: \"{e}\"", file=sys.stderr)
-    MAIN_LOG.error(e)
-    sys.exit()
+    LOGGER.error(e)
+    sys.exit(f"Game modules not found: \"{e}\"")
 
 try:
     from PyQt5 import QtWidgets, QtGui, QtCore
 except Exception as e:
-    print(f"PyQt5 not found: {e}. Please use pip install command for install this package.",
-          file=sys.stderr)
-    MAIN_LOG.error(e)
-    sys.exit()
+    LOGGER.error(e)
+    sys.exit(f"PyQt5 not found: {e}. Please use pip install command for install this package.")
 
 
 class MainWindow(QtWidgets.QWidget):
     """Main reversi window."""
     def __init__(self, parent=None):
         super().__init__(parent)
+        LOGGER.info("Main window was initialized.")
         self._dialog = StartDialog()
         self._dialog.ok_button.clicked.connect(self._new_game)
         self._frame = Frame(self)
@@ -105,6 +103,7 @@ class MainWindow(QtWidgets.QWidget):
         self._frame._game = Reversi(**self._start_params)
         self._frame.send_messages()
         self.update()
+        LOGGER.info(f"Game was restarted with {self._start_params} parameters.")
 
     def _save(self):
         """Save game to .dat file."""
@@ -115,8 +114,9 @@ class MainWindow(QtWidgets.QWidget):
             if filename:
                 with open(filename, 'wb') as file:
                     pickle.dump(self._frame.game, file)
+                    LOGGER.info(f"Game was saved into {filename} file.")
         except SaveError as exception:
-            MAIN_LOG.error(exception)
+            LOGGER.warning(exception)
             QtWidgets.QMessageBox.warning(self, "Error", f"Save error: {exception}.", QtWidgets.QMessageBox.Ok)
 
     def _load(self):
@@ -133,8 +133,9 @@ class MainWindow(QtWidgets.QWidget):
                     self._frame._game = object_
                     self._frame.send_messages()
                     self.update()
+                    LOGGER.info(f"Game was loaded from {filename} file.")
         except LoadError as exception:
-            MAIN_LOG.error(exception)
+            LOGGER.warning(exception)
             QtWidgets.QMessageBox.warning(self, "Error", f"Save error: {exception}.", QtWidgets.QMessageBox.Ok)
 
     def _about(self):
@@ -158,9 +159,11 @@ class Frame(QtWidgets.QFrame):
         super().__init__(parent)
         self._game = Reversi(**params)
         self.setFixedSize(460, 460)
+        LOGGER.info(f"Game frame was initialized with {params} parameters.")
 
     @property
     def game(self):
+        """Game property"""
         return self._game
 
     def send_messages(self):
@@ -168,6 +171,7 @@ class Frame(QtWidgets.QFrame):
         self.white_score_msg.emit(str(self._game.field.white_count))
         self.black_score_msg.emit(str(self._game.field.black_count))
         self.current_player_msg.emit("Current turn: " + self._game.str_player)
+        LOGGER.info("Messages was sent from game frame to main window.")
 
     def paintEvent(self, event):
         # draw background
@@ -220,19 +224,24 @@ class Frame(QtWidgets.QFrame):
         try:
             coords = (self.pixels_to_field(event.x(), event.y()))
             self._game.make_move(coords)
+            LOGGER.info(f"{self.game.str_player} made move to {coords} place.")
             self.send_messages()
             self.repaint()
             if self._game.opponent == "Ai":
                 try:
                     self._game.ai_move()
+                    LOGGER.info(f"{self.game.str_player} made move to {coords} place.")
                     self.send_messages()
                 except NoMovesException:
+                    LOGGER.info(f"No moves for {self._game.str_player}'s opponent")
                     QtWidgets.QMessageBox.warning(self, "Warning",
                                                   "Next player can't move.", QtWidgets.QMessageBox.Ok)
                     self._game.ai_move()
+                    LOGGER.info(f"{self.game.str_player} made move to {coords} place.")
                     self.send_messages()
                 self.repaint()
         except NoMovesException:
+            LOGGER.info(f"No moves for {self._game.str_player}'s opponent")
             QtWidgets.QMessageBox.warning(self, "Warning",
                                           "Next player can't move.", QtWidgets.QMessageBox.Ok)
             return
@@ -240,6 +249,8 @@ class Frame(QtWidgets.QFrame):
             return
         except GameOverException:
             self.send_messages()
+            self.current_player_msg.emit("Game over!")
+            LOGGER.info(f"Game over. {self._game.winner}.")
             QtWidgets.QMessageBox.information(self, "Game over",
                                               f"'{self._game.winner}", QtWidgets.QMessageBox.Ok)
 
@@ -250,6 +261,7 @@ class StartDialog(QtWidgets.QDialog):
         super().__init__(parent=parent)
         self._params = {}
         self.init_ui()
+        LOGGER.info("Start dialog was initialized.")
 
     @property
     def params(self):
@@ -263,7 +275,8 @@ class StartDialog(QtWidgets.QDialog):
         self.size_label = QtWidgets.QLabel("Choose field size: ", self)
         self.size_box = QtWidgets.QSpinBox(self)
         self.size_box.valueChanged.connect(self.set_size_value)
-        self.size_box.setValue(8)
+        self.size_box.setRange(4, 30)
+        self.size_box.setSingleStep(2)
 
         main_layout.addWidget(self.size_label)
         main_layout.addWidget(self.size_box)

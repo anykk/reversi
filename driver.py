@@ -108,24 +108,25 @@ class Reversi:
             self.make_move(choice(possible_moves))
         else:
             possible_moves = self.get_correct_moves()
-            good_moves = [(0, 0), (0, self._field.size), (self._field.size, 0), (self._field.size, self._field.size)]
+            good_moves = [(0, 0), (0, self._field.size - 1),
+                          (self._field.size - 1, 0), (self._field.size - 1, self._field.size - 1)]
             moved = False
             for coords in good_moves:
                 if coords in possible_moves:
                     self.make_move(coords)
                     moved = True
                     break
+
             if not moved:
-                self.make_move(choice(possible_moves))
+                greedy = dict(zip(map(lambda x: len(self.is_correct_move(x)), possible_moves), possible_moves))
+                self.make_move(greedy[max(greedy.keys())])
 
     def get_opponent(self):
         """Gets opponent to current player."""
         if self._current_player == WHITE:
             return BLACK
-        if self._current_player == BLACK:
-            return WHITE
         else:
-            raise TypeError("Can't get opponent to this.")
+            return WHITE
 
     def next_player(self):
         """Switch flag to next player."""

@@ -18,7 +18,6 @@ class Field:
         self._skeleton = [[EMPTY for _ in range(self._size)] for _ in range(self._size)]
         self._black_count = 0
         self._white_count = 0
-        self._extra_count = 0
         self.set_up()
 
     def set_up(self):

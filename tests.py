@@ -3,8 +3,7 @@ from driver import *
 
 
 class FieldTests(unittest.TestCase):
-    """docstring for ModelTests"""
-
+    """Field's method tests"""
     def setUp(self):
         self.field = Field(8)
 
@@ -48,8 +47,14 @@ class FieldTests(unittest.TestCase):
 
 
 class ReversiTests(unittest.TestCase):
+    """Reversi's method tests."""
     def setUp(self):
         self.reversi = Reversi()
+
+    def test_get_opponent(self):
+        self.assertEqual(self.reversi.get_opponent(), WHITE)
+        self.reversi._current_player = WHITE
+        self.assertEqual(self.reversi.get_opponent(), BLACK)
 
     def test_correct_moves(self):
         self.assertEqual(self.reversi.get_correct_moves(), [(2, 3), (3, 2), (4, 5), (5, 4)])

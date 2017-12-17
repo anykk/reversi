@@ -46,3 +46,9 @@ class LoadError(Exception):
 class NoMovesException(Exception):
     """It throws when next player can't move."""
     pass
+
+
+class HaveNotExtraException(Exception):
+    """It throws when player havn't extra disks anymore."""
+    pass
+
