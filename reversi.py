@@ -277,6 +277,7 @@ class StartDialog(QtWidgets.QDialog):
         self.size_box.valueChanged.connect(self.set_size_value)
         self.size_box.setRange(4, 30)
         self.size_box.setSingleStep(2)
+        self.size_box.setValue(8)
 
         main_layout.addWidget(self.size_label)
         main_layout.addWidget(self.size_box)
