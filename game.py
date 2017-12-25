@@ -18,6 +18,7 @@ class Field:
         self._skeleton = [[EMPTY for _ in range(self._size)] for _ in range(self._size)]
         self._black_count = 0
         self._white_count = 0
+        self._extra_count = 0
         self.set_up()
 
     def set_up(self):
@@ -43,9 +44,9 @@ class Field:
         return self._DIRECTIONS
 
     @property
-    def is_full(self):
-        """Check that field is full."""
-        return self._white_count + self._black_count + self._extra_count == self._size ** 2
+    def possibility_extra(self):
+        """Said that we can or not place extra disk."""
+        return self._extra_count < self._size
 
     def flip(self, coords):
         """Flip disk. It mean that disk changes its color."""
@@ -86,6 +87,7 @@ class Field:
         self._skeleton[coords[0]][coords[1]] = color
         self._white_count += 1 if color == WHITE else 0
         self._black_count += 1 if color == BLACK else 0
+        self._extra_count += 1 if color == EXTRA else 0
 
     def __str__(self):
         """String representation of field."""

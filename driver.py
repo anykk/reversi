@@ -1,7 +1,7 @@
 from time import sleep
 from random import choice
 from game import *
-from exceptions import GameOverException, NoMovesException, MoveError, SaveError, LoadError
+from exceptions import GameOverException, NoMovesException, MoveError, SaveError, LoadError, HaveNotExtraException
 
 
 class Reversi:
@@ -32,6 +32,11 @@ class Reversi:
     def str_player(self):
         """Returns string player name."""
         return "Black" if self._current_player == BLACK else "White"
+
+    @property
+    def mode(self):
+        """Returns game mode."""
+        return self._mode
 
     @property
     def field(self):
@@ -91,6 +96,17 @@ class Reversi:
             self.next_player()
         else:
             raise MoveError(f"{self._current_player} tried to make move with wrong coords: {coords}.")
+
+    def place_extra(self, coords):
+        """Place extra disk and swap flag."""
+        if self.is_correct_move(coords):
+            if self._field.possibility_extra:
+                self._field[coords] = EXTRA
+                self.next_player()
+            else:
+                raise HaveNotExtraException()
+        else:
+            raise MoveError(f"{self._current_player} tried to place extra disk to : {coords} coords.")
 
     @property
     def opponent(self):

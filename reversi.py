@@ -205,6 +205,9 @@ class Frame(QtWidgets.QFrame):
                 if disk == BLACK:
                     qp.setBrush(QtGui.QColor(0, 0, 0))
                     qp.drawEllipse(rect)
+                if disk == EXTRA:
+                    qp.setBrush(QtGui.QColor(178, 34, 34))
+                    qp.drawEllipse(rect)
 
         for y, x in self._game.get_correct_moves():
             # draw possible moves
@@ -223,7 +226,13 @@ class Frame(QtWidgets.QFrame):
     def mousePressEvent(self, event):
         try:
             coords = (self.pixels_to_field(event.x(), event.y()))
-            self._game.make_move(coords)
+            if self._game.mode == "Extra":
+                if event.button() == QtCore.Qt.LeftButton:
+                    self._game.make_move(coords)
+                elif event.button() == QtCore.Qt.RightButton:
+                    self._game.place_extra(coords)
+            else:
+                self._game.make_move(coords)
             LOGGER.info(f"{self.game.str_player} made move to {coords} place.")
             self.send_messages()
             self.repaint()
@@ -247,6 +256,9 @@ class Frame(QtWidgets.QFrame):
             return
         except MoveError:
             return
+        except HaveNotExtraException:
+            QtWidgets.QMessageBox.warning(self, "Warning",
+                                          "Players haven't extra disks anymore.", QtWidgets.QMessageBox.Ok)
         except GameOverException:
             self.send_messages()
             self.current_player_msg.emit("Game over!")
@@ -275,6 +287,7 @@ class StartDialog(QtWidgets.QDialog):
         self.size_label = QtWidgets.QLabel("Choose field size: ", self)
         self.size_box = QtWidgets.QSpinBox(self)
         self.size_box.valueChanged.connect(self.set_size_value)
+        self.size_box.lineEdit().setReadOnly(True)
         self.size_box.setRange(4, 30)
         self.size_box.setSingleStep(2)
         self.size_box.setValue(8)
