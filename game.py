@@ -46,7 +46,7 @@ class Field:
     @property
     def possibility_extra(self):
         """Said that we can or not place extra disk."""
-        return self._extra_count < self._size
+        return self._extra_count < self._size // 2
 
     def flip(self, coords):
         """Flip disk. It mean that disk changes its color."""
