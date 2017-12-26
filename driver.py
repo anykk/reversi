@@ -99,7 +99,7 @@ class Reversi:
 
     def place_extra(self, coords):
         """Place extra disk and swap flag."""
-        if self.is_correct_move(coords):
+        if self._field[coords] is EMPTY and coords not in self.get_correct_moves():
             if self._field.possibility_extra:
                 self._field[coords] = EXTRA
                 self.next_player()
